@@ -22,10 +22,41 @@ const { NotImplementedError } = require('../extensions/index.js');
  * }
  *
  */
-function getDNSStats(/* domains */) {
-  throw new NotImplementedError('Not implemented');
+function getDNSStats(domains) {
+  // throw new NotImplementedError('Not implemented');
   // remove line with error and write your code here
+
+  if (domains.length == 0) { return {} }
+
+  let helpArr = [];
+  let result = {};
+  let n = 1;
+
+  for (let j = 0; j < domains.length; j++) {
+    const arr = domains[j].split(".")
+    let key = ''
+    for (let i = arr.length - 1; i >= 0; i--) {
+      key = key + '.' + arr[i];
+      helpArr.push(key)
+      // console.log('key=', key);
+      // result[`${key}`] = 0;
+    }
+  }
+
+  // console.log(result, helpArr);
+
+  for (let i = 0; i < helpArr.length; i++) {
+
+    // console.log(helpArr.reduce((n, el) => { if (el == helpArr[i]) { return n + 1 } else { return n } }, 0))
+    result[`${helpArr[i]}`] = helpArr.reduce((n, el) => { if (el == helpArr[i]) { return n + 1 } else { return n } }, 0)
+  }
+  return result
 }
+
+// console.log(getDNSStats(['code.yandex.ru', 'music.yandex.ru', 'yandex.ru']));
+// console.log(getDNSStats(['epam.com']), { '.com': 1, '.com.epam': 1 });
+// console.log(getDNSStats(['epam.com', 'info.epam.com']), { '.com': 2, '.com.epam': 2, '.com.epam.info': 1 });
+// console.log(getDNSStats([]), {});
 
 module.exports = {
   getDNSStats
